@@ -173,3 +173,4 @@ docs
 *.parquet
 *.csv
 runs
+ray_results
