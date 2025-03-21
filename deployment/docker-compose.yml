@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  torchserve:
+    image: pytorch/torchserve  # Use the official TorchServe image directly
+    container_name: torchserve_container
+    platform: linux/amd64 
+    ports:
+      - "8080:8080"  # Inference API
+      - "8081:8081"  # Management API
+    volumes:
+      - ./model_store:/home/model-server/model-store  # Mount local model store
+      - ./config.properties:/home/model-server/config.properties  # Mount config file
+    command: >
+      torchserve --start --ncs 
+      --model-store /home/model-server/model-store 
+      --models porter_model.mar 
+      --ts-config /home/model-server/config.properties 
+      --disable-token-auth
+    restart: always  # Restart if the container crashes
